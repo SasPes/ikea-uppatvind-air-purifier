@@ -1,0 +1,79 @@
+esphome:
+  name: ikea-air-purifier
+  friendly_name: IKEA Air Purifier
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "<key>"
+
+ota:
+  - platform: esphome
+    password: "<password>"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Ikea-Air-Purifier"
+    password: "Ikea-Air-Purifier"
+
+captive_portal:
+
+# Web interface (auto-generated)
+web_server:
+  port: 80
+
+# --- MOSFET (ON/OFF) ---
+switch:
+  - platform: gpio
+    pin: D1
+    id: mosfet
+    name: "Power"
+    restore_mode: ALWAYS_OFF
+
+# --- FAN PWM SETUP ---
+output:
+  - platform: esp8266_pwm
+    id: fan_pwm
+    pin: D5
+    frequency: 75 Hz   # startup frequency
+
+# --- TEMPLATE NUMBER (0–100%) ---
+number:
+  - platform: template
+    name: "Fan Speed (%)"
+    id: fan_speed_percent
+    min_value: 0
+    max_value: 100
+    step: 1
+    restore_value: true
+    optimistic: true
+    set_action:
+      - lambda: |-
+          // FORCED limits
+          const float min_f = 75.0;
+          const float max_f = 300.0;
+
+          float percent = x;
+          percent = clamp(percent, 0.0f, 100.0f);
+
+          // Map 0–100% → 75–300 Hz
+          float freq = min_f + (percent / 100.0f) * (max_f - min_f);
+
+          // Debug output
+          ESP_LOGI("fan", "Setting fan to %.1f%% -> %.1f Hz", percent, freq);
+
+          // Apply frequency
+          id(fan_pwm).set_frequency(freq);
+
+          // Use a 50% duty square wave
+          id(fan_pwm).set_level(0.5);    
