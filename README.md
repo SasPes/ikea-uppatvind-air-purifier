@@ -3,7 +3,9 @@ IKEA UPPÅTVIND Air Purifier - ESPHome/Arduino - ESP8266 &amp; XY-MOS &amp; LM25
 
 ## Circuit Diagram
 
-![breadboard](breadboard.png)
+<img src="breadboard.png" alt="drawing" width="500"/>
+
+[Fritzing Breadboard](IKEA UPPATVIND Air Purifier.fzz)
 
 ### Components
 #### ESP8266 NodeMCU
