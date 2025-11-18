@@ -15,17 +15,13 @@ PWM is a control pin for pulse width modulation and FG is the tacho pin for feed
 The fan operates with a constant duty cycle of 50% and variable frequency between ca. 1-300Hz.
 
 #### ESP8266 NodeMCU
-```
 Wi-Fi-enabled microcontroller board that runs your code and controls other electronics
-```
+
 #### XY-MOS
-```
 MOSFET power switch module that lets the ESP8266 safely turn high-voltage or high-current loads on and off
-```
+
 #### LM2596
-```
 Buck converter that steps down higher voltages (like 24 V) to lower voltages (like 3.3 V) to safely power your electronics
-```
 
 ## ESPHome
 ```
